@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>INDvSA</title>
+    <link rel="stylesheet prefetch" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <style>
+    * {box-sizing:border-box;}
+    body {background-color: white;}
+
+    .greeting {
+      color:black;
+      font-size: 100px;
+      font-style: Mitr;
+      text-shadow: 1px 1px 3px rgba(255,255,255, .5);
+      text-align: center;
+    }
+    .article {
+    list-style-type: none;
+    padding:10px;
+    border-top: 1px solid #CCC;
+    background: rgb(166, 211, 214);
+    }
+    </style>
+</head>
+<body>
+  <div class="container-fluid text-center">
+    <h2 id="greeting" class="greeting">INDIA vs South Africa</h2>
+
+    <div id="tweets-container">
+        <h1 id="tweets-header">Relevant Tweets</h1>
+        <div id="tweets-links"></div>
+        <script>
+          var data = {{ tweets|tojson }}//passed with get request
+          console.log(data)
+          for(var i=0;i<data.length;i++){
+            var tweetText = data[i].tweet_text;
+            var uurl = 'https://twitter.com/search?q=%23INDvSA&src=tyah';
+            var sentimentValue = data[i].sentiment;
+            $('#tweets-links').append('<a href="' + uurl + '"><div class="article"><h3>' + tweetText + '</h3>'+ sentimentValue +'</div></a><hr><br>' );
+          }
+        </script>
+    </div>
+  </div>
+
+</body>
+</html>
