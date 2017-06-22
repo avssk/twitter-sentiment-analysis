@@ -14,6 +14,7 @@ session = DBSession()
 app = Flask(__name__)
 store_tweets()
 
+
 @app.route("/")
 def start():
     tweets = session.query(Tweet).all()

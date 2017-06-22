@@ -5,6 +5,7 @@ from sqlalchemy import create_engine
 
 Base = declarative_base()
 
+# This table stores tweets and their analysis
 class Tweet(Base):
     __tablename__ = 'issue'
     id = Column(Integer, primary_key=True)

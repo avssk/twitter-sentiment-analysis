@@ -30,13 +30,16 @@ api = tweepy.API(auth)
 
 # query string
 query = 'INDvSA'
-max_tweets = 5
+max_tweets = 50
+
 # list of objects containing tweet's data
 tweets = [status for status in tweepy.Cursor(api.search, q=query).items(max_tweets)]
+
 
 # clean tweet text
 def clean_tweet(tweet):
         return ' '.join(re.sub("(RT) | ([^0-9A-Za-z \t])|(\w+:\/\/\S+) | (http)", " ", tweet).split())
+
 
 # calculate sentiment type as positive, negative or neutral upon text of tweet
 def tweet_sentiment(tweet_text):
@@ -44,7 +47,7 @@ def tweet_sentiment(tweet_text):
     polarity = testimonial.sentiment.polarity
     if (polarity >= 0.2):
         return 'positive'
-    elif ((polarity < 0.2) and (polarity > -0.2)):
+    elif ((polarity < 0.3) and (polarity >= 0)):
         return 'neutral'
     else:
         return 'negative'

@@ -1,23 +1,25 @@
-import random, string
-import tweepy
-from textblob import TextBlob
-import json, re
+from urllib import urlencode
+from httplib2 import Http
+import json
+import sys
+import base64
 
-# Step 1 - Authenticate
-consumer_key= 'sVZQUEr2FKOP9HVgiEex60v4Z'
-consumer_secret= 'zha6TPBktaqX6mNHu4Twv04H02VddqcCARwKOUoMgvMIf4fPHr'
 
-access_token='452975600-G90Wq6x2U5qY7cWxFVTWIL1JW2GhqrHBuqiQulON'
-access_token_secret='oMIveMb5VrnSqQXGgdQVPP0ejzdyOCVQmRWMiW6daJszy'
+print "Running Endpoint Tester....\n"
+address = raw_input("Please enter the address of the server you want to access, \n If left blank the connection will be set to 'http://localhost:5000':   ")
+if address == '':
+	address = 'http://localhost:5000'
 
-auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
-auth.set_access_token(access_token, access_token_secret)
+try:
+	h = Http()
+	url = address + '/'
+	resp, content = h.request(url,'GET', headers = {"Content-Type": "application/json"})
+	if resp['status'] != '200':
+ 		raise Exception('Received an unsuccessful status code of %s' % resp['status'])
 
-api = tweepy.API(auth)
-
-# query string
-query = 'INDvSA'
-max_tweets = 1
-# list of objects containing tweet's data
-tweets = [status for status in tweepy.Cursor(api.search, q=query).items(max_tweets)]
-print tweets
+except Exception as err:
+	print "Test FAILED"
+	print err.args
+	sys.exit()
+else:
+	print "Test PASS: Succesfully"
