@@ -10,7 +10,6 @@ import tweepy
 from textblob import TextBlob
 import json, re
 
-
 engine = create_engine('sqlite:///tweets.db')
 
 Base.metadata.bind = engine
@@ -31,7 +30,7 @@ api = tweepy.API(auth)
 
 # query string
 query = 'INDvSA'
-max_tweets = 500
+max_tweets = 5
 # list of objects containing tweet's data
 tweets = [status for status in tweepy.Cursor(api.search, q=query).items(max_tweets)]
 
@@ -54,9 +53,11 @@ def tweet_sentiment(tweet_text):
 # Store tweets with their sentiments in a database
 def store_tweets():
     for tweet in tweets:
+        tweet_id = tweet.id
         tweet_text = clean_tweet(tweet.text)
         tweet_text = unicodedata.normalize('NFKD', tweet_text).encode('ascii','ignore')
         sentiment = tweet_sentiment(tweet_text)
-        newTweet = Tweet(tweet_text= tweet_text, sentiment= sentiment)
-        session.add(newTweet)
-        session.commit()
+        if(session.query(Tweet).filter_by(tweet_id = tweet_id).scalar() is None):
+            newTweet = Tweet(tweet_id=tweet_id, tweet_text= tweet_text, sentiment= sentiment)
+            session.add(newTweet)
+            session.commit()

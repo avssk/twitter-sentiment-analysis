@@ -8,6 +8,7 @@ Base = declarative_base()
 class Tweet(Base):
     __tablename__ = 'issue'
     id = Column(Integer, primary_key=True)
+    tweet_id = Column(Integer)
     tweet_text = Column(String)
     sentiment = Column(String)
 
@@ -16,6 +17,7 @@ class Tweet(Base):
     def serialize(self):
         return {
         'id' : self.id,
+        'tweet_id' : self.tweet_id,
         'tweet_text' : self.tweet_text,
         'sentiment' : self.sentiment
             }

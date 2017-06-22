@@ -1,22 +1,23 @@
+import random, string
+import tweepy
+from textblob import TextBlob
+import json, re
 
-from model import Base, Tweet
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import relationship, sessionmaker
-from sqlalchemy import create_engine
-import unicodedata
+# Step 1 - Authenticate
+consumer_key= 'sVZQUEr2FKOP9HVgiEex60v4Z'
+consumer_secret= 'zha6TPBktaqX6mNHu4Twv04H02VddqcCARwKOUoMgvMIf4fPHr'
 
-engine = create_engine('sqlite:///tweets.db')
+access_token='452975600-G90Wq6x2U5qY7cWxFVTWIL1JW2GhqrHBuqiQulON'
+access_token_secret='oMIveMb5VrnSqQXGgdQVPP0ejzdyOCVQmRWMiW6daJszy'
 
-Base.metadata.bind = engine
-DBSession = sessionmaker(bind=engine)
-session = DBSession()
+auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
+auth.set_access_token(access_token, access_token_secret)
 
-# Store tweets with their sentiments in a database
-def store_tweets():
-        tweet_text = "Hello how are you"
-        sentiment = 'positive'
-        newTweet = Tweet(tweet_text= tweet_text, sentiment= sentiment)
-        session.add(newTweet)
-        session.commit()
+api = tweepy.API(auth)
 
-store_tweets()
+# query string
+query = 'INDvSA'
+max_tweets = 1
+# list of objects containing tweet's data
+tweets = [status for status in tweepy.Cursor(api.search, q=query).items(max_tweets)]
+print tweets

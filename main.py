@@ -12,10 +12,10 @@ Base.metadata.bind = engine
 DBSession = sessionmaker(bind=engine)
 session = DBSession()
 app = Flask(__name__)
+store_tweets()
 
 @app.route("/")
 def start():
-    store_tweets()
     tweets = session.query(Tweet).all()
     tweets = [tweet.serialize for tweet in tweets]
     return render_template('index.html', tweets=tweets)
@@ -23,7 +23,6 @@ def start():
 # endpoints for retrieving tweets data from data
 @app.route("/postdata", methods = ['POST'])
 def send_data():
-    store_tweets()
     tweets = session.query(Tweet).all()
     return jsonify(tweets = [tweet.serialize for tweet in tweets])
 
