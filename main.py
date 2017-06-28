@@ -5,7 +5,6 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship, sessionmaker
 from sqlalchemy import create_engine
 
-
 engine = create_engine('sqlite:///tweets.db')
 
 Base.metadata.bind = engine
